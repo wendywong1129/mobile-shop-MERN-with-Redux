@@ -18,28 +18,17 @@ const Header = () => {
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>Mobile Shop</Navbar.Brand>
+            <Navbar.Brand>Shoppier</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
             <Nav className="ms-auto">
-              {user ? (
-                <NavDropdown title={user.name} id="username">
-                  <LinkContainer to="/profile">
-                    <NavDropdown.Item>My profile</NavDropdown.Item>
-                  </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler}>
-                    Logout
-                  </NavDropdown.Item>
-                </NavDropdown>
-              ) : (
-                <LinkContainer to="/login">
-                  <Nav.Link>
-                    <i className="fa-solid fa-user"></i>&nbsp;Login
-                  </Nav.Link>
-                </LinkContainer>
-              )}
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <i className="fa-solid fa-cart-shopping"></i>&nbsp;Cart
+                </Nav.Link>
+              </LinkContainer>
               {user && user.isAdmin && (
                 <NavDropdown title="Dashboard" id="adminmenu">
                   <LinkContainer to="/admin/userList">
@@ -53,11 +42,25 @@ const Header = () => {
                   </LinkContainer>
                 </NavDropdown>
               )}
-              <LinkContainer to="/cart">
-                <Nav.Link>
-                  <i className="fa-solid fa-cart-shopping"></i>&nbsp;Cart
-                </Nav.Link>
-              </LinkContainer>
+              {user ? (
+                <NavDropdown title={user.name} id="username">
+                  <LinkContainer to="/profile">
+                    <NavDropdown.Item>My profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/order-history">
+                    <NavDropdown.Item>Order History</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={logoutHandler}>
+                    Logout
+                  </NavDropdown.Item>
+                </NavDropdown>
+              ) : (
+                <LinkContainer to="/login">
+                  <Nav.Link>
+                    <i className="fa-solid fa-user"></i>&nbsp;Login
+                  </Nav.Link>
+                </LinkContainer>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -64,16 +64,19 @@ const deleteProductById = asyncHandler(async (req, res) => {
 //@route   POST/api/products
 //@access  private（admin only）
 const createProduct = asyncHandler(async (req, res) => {
+  const { name, price, image, brand, category, countInStock, description } =
+    req.body;
+
   const product = new Product({
     user: req.user._id,
-    name: "sample",
-    price: 0,
-    image: "/images/sample.jpg",
-    brand: "brand",
-    category: "category",
-    countInStock: 0,
+    name,
+    price,
+    image,
+    brand,
+    category,
+    countInStock,
     numReviews: 0,
-    description: "description",
+    description,
     rating: 0,
   });
   const createdProduct = await product.save();
@@ -120,10 +123,10 @@ const createProductReview = asyncHandler(async (req, res) => {
       throw new Error("You have already commented the product.");
     }
     const review = {
+      user: req.user._id,
       name: req.user.name,
       rating: Number(rating),
       comment,
-      user: req.user._id,
     };
     product.reviews.push(review);
     product.numReviews = product.reviews.length;

@@ -8,7 +8,7 @@ const authToken = asyncHandler(async (req, res, next) => {
 
   if (!token) {
     res.status(401);
-    throw new Error("Unauthorized! Cannot find the token.");
+    throw new Error("Unauthorized! Token required.");
   }
   try {
     const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);

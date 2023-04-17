@@ -1,6 +1,6 @@
 const products = [
   {
-    name: "iPhone SE 5G 64GB",
+    name: "iPhone SE 64GB",
     image: "/images/iphone-se.jpg",
     description:
       "4.7-inch Retina HD display; Advanced single-camera system with 12MP Wide camera, Smart HDR 4, Photographic Styles, Portrait mode, and 4K video up to 60 fps; 7MP FaceTime HD camera with Smart HDR 4, Photographic Styles, Portrait mode and 1080p video recording.",
@@ -48,7 +48,7 @@ const products = [
     numReviews: 5,
   },
   {
-    name: "Samsung Galaxy Z Fold4 5G 256GB",
+    name: "Samsung Z Fold4 256GB",
     image: "/images/samsung-galaxy-z-fold4.jpg",
     description:
       'Unfold for a Tablet like experience on our lightest Fold yet; 7.6" Main & 6.2" cover display2 with up to 120Hz refresh; Rated IPX8 and wrapped in tough Gorilla Glass Victus+.',
@@ -60,7 +60,7 @@ const products = [
     numReviews: 10,
   },
   {
-    name: "Samsung Galaxy S22 5G 128GB",
+    name: "Samsung S22 128GB",
     image: "/images/samsung-galaxy-s22.jpg",
     description:
       '6.1" BrightVision display with adaptive 120Hz refresh rate; 50MP camera - with new Adaptive Pixel Technology. Three lenses, advanced Nightography and 8K video recording; 3,700mAh (typical) All Day Battery with 25W Super-Fast Charging.',
@@ -72,7 +72,7 @@ const products = [
     numReviews: 7,
   },
   {
-    name: "Google Pixel 7 5G 128GB",
+    name: "Google Pixel 7 128GB",
     image: "/images/google-pixel-7.jpg",
     description:
       'Powered by Google Tensor G2 for amazing performance; 6.3" FHD+ Smooth Display up to 90 Hz; Wide and ultrawide lenses with up to 8x Super Res Zoom.',
@@ -84,7 +84,7 @@ const products = [
     numReviews: 10,
   },
   {
-    name: "TCL 30 5G 128GB",
+    name: "TCL 30 128GB",
     image: "/images/tcl-30.jpg",
     description:
       "6.7” FHD+ True-to-life AMOLED display; Ultra-slim stylish design; 50MP AI Triple Camera.",
@@ -96,7 +96,7 @@ const products = [
     numReviews: 12,
   },
   {
-    name: "Vivo Y52 5G 128GB",
+    name: "Vivo Y52 128GB",
     image: "/images/vivo-y52.jpg",
     description:
       "Ultra-Fast 5G Connectivity; Massive 5000mAh Battery Powerhouse +18W Fast Charging; 48MP Rear Camera + Ultra Stable Video Recording.",
@@ -108,7 +108,7 @@ const products = [
     numReviews: 9,
   },
   {
-    name: "OPPO Find X5 Pro 5G 256GB ",
+    name: "OPPO Find X5 Pro 256GB ",
     image: "/images/oppo-find-x5-pro.jpg",
     description:
       "Take your photography to new heights with futuristic technology, housed in a curved body; Hasselblad Camera for Mobile; SLR-Level 5-Axis Optical Image Stabilisation",

@@ -47,12 +47,12 @@ const PaymentPage = () => {
             ></Form.Check>
             <Form.Check
               type="radio"
-              label="weChat"
-              id="weChat"
+              label="Cash On Delivery"
+              id="CashOnDelivery"
               name="paymentMethod"
-              value="weChat"
+              value="CashOnDelivery"
               onChange={(e) => setPaymentMethod(e.target.value)}
-              checked={paymentMethod === "weChat"}
+              checked={paymentMethod === "CashOnDelivery"}
               className="my-2"
             ></Form.Check>
           </Col>

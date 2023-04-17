@@ -1,10 +1,20 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { ListGroup, Row, Col, Image, Card } from "react-bootstrap";
-import { getOrderDetails } from "../actions/orderActions";
+import { ListGroup, Row, Col, Image, Card, Button } from "react-bootstrap";
+import axios from "axios";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from "../actions/orderActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
+import {
+  ORDER_DELIVER_RESET,
+  ORDER_PAY_RESET,
+} from "../constants/orderConstants";
 
 const OrderPage = () => {
   const { orderId } = useParams();
@@ -13,11 +23,20 @@ const OrderPage = () => {
 
   const dispatch = useDispatch();
 
+  const [paypalState, paypalDispatch] = usePayPalScriptReducer();
+  const { isPending } = paypalState;
+
   const userLogin = useSelector((state) => state.userLogin);
   const { user } = userLogin;
 
   const orderDetails = useSelector((state) => state.orderDetails);
   const { loading, order, error } = orderDetails;
+
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
   if (!loading) {
     const addDecimals = (num) => {
@@ -34,15 +53,58 @@ const OrderPage = () => {
     );
   }
 
+  const loadPaypalScript = async () => {
+    const { data: clientId } = await axios.get("/api/config/paypal");
+    paypalDispatch({
+      type: "resetOptions",
+      value: {
+        "client-id": clientId,
+        currency: "AUD",
+      },
+    });
+    paypalDispatch({ type: "setLoadingStatus", value: "pending" });
+  };
+
+  const createOrder = (data, actions) => {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: { value: order.totalPrice },
+          },
+        ],
+      })
+      .then((orderId) => {
+        return orderId;
+      });
+  };
+
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(async function (details) {
+      dispatch(payOrder(orderId, details));
+    });
+  };
+
+  const onError = (err) => {
+    console.log(err);
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
+  };
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
-    if (!order || order._id !== orderId) {
+    if (!order || order._id !== orderId || successPay || successDeliver) {
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
+    } else {
+      loadPaypalScript();
     }
-    // eslint-disable-next-line
-  }, [order, orderId]);
+  }, [order, orderId, paypalDispatch, successPay, successDeliver]); // eslint-disable-line
 
   return loading ? (
     <Loader />
@@ -50,7 +112,7 @@ const OrderPage = () => {
     <Message variant="danger">{error}</Message>
   ) : (
     <>
-      <h1>Order Number{order._id}</h1>
+      <h1>Order Number: {order._id}</h1>
       <Row>
         <Col md={9}>
           <ListGroup variant="flush">
@@ -73,7 +135,7 @@ const OrderPage = () => {
               </p>
               {order.isDelivered ? (
                 <Message variant="success">
-                  Time of Dispatch:
+                  Time of Dispatch:&nbsp;
                   {order.deliveredAt.substring(0, 10) +
                     " " +
                     order.deliveredAt.substring(11, 19)}
@@ -90,7 +152,7 @@ const OrderPage = () => {
               </p>
               {order.isPaid ? (
                 <Message variant="success">
-                  Time of Payment:
+                  Time of Payment:&nbsp;
                   {order.paidAt.substring(0, 10) +
                     " " +
                     order.paidAt.substring(11, 19)}
@@ -156,6 +218,33 @@ const OrderPage = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
+              {/* PayPal BTN */}
+              {!order.isPaid && order.paymentMethod === "PayPal" && (
+                <div>
+                  {isPending ? (
+                    <div className="spinner" />
+                  ) : (
+                    <PayPalButtons
+                      createOrder={createOrder}
+                      onApprove={onApprove}
+                      onError={onError}
+                    ></PayPalButtons>
+                  )}
+                  {loadingPay && <div>Loading...</div>}
+                </div>
+              )}
+              {/* Dispatch BTN */}
+              {user && user.isAdmin && order.isPaid && !order.isDelivered && (
+                <ListGroup.Item>
+                  <Button
+                    className="btn-block"
+                    type="button"
+                    onClick={deliverHandler}
+                  >
+                    Dispatch
+                  </Button>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

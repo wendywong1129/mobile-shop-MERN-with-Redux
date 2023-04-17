@@ -5,6 +5,8 @@ import {
   getOrderById,
   getOrders,
   getMyOrders,
+  updateOrderToPaid,
+  updateOrderToDelivered,
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -15,5 +17,7 @@ router
   .get(authToken, authAdmin, getOrders);
 router.route("/myOrders").get(authToken, getMyOrders);
 router.route("/:orderId").get(authToken, getOrderById);
-// router.route("/myOrders").get(authToken, getMyOrders);
+router.route("/:id/pay").put(authToken, updateOrderToPaid);
+router.route("/:id/deliver").put(authToken, authAdmin, updateOrderToDelivered);
+
 export default router;

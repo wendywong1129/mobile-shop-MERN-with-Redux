@@ -5,14 +5,9 @@ import { Table, Button, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
-// import Paginate from "../components/Paginate";
-import {
-  listProducts,
-  deleteProductById,
-  createProduct,
-} from "../actions/productActions";
-import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 import Paginate from "../components/Paginate";
+import { listProducts, deleteProductById } from "../actions/productActions";
+import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
 
 const ProductListPage = () => {
   const { pageNumber } = useParams();
@@ -35,14 +30,6 @@ const ProductListPage = () => {
     error: errorDelete,
   } = productDelete;
 
-  const productCreate = useSelector((state) => state.productCreate);
-  const {
-    loading: loadingCreate,
-    success: successCreate,
-    error: errorCreate,
-    product: createdProduct,
-  } = productCreate;
-
   useEffect(() => {
     // if (user && user.isAdmin) {
     //   dispatch(listProducts());
@@ -52,22 +39,11 @@ const ProductListPage = () => {
     dispatch({ type: PRODUCT_CREATE_RESET });
     if (!user.isAdmin) {
       navigate("/login");
-    }
-    if (successCreate) {
-      navigate(`/admin/product/${createdProduct._id}/edit`);
     } else {
       // dispatch(listProducts());
       dispatch(listProducts("", pageNumber));
     }
-  }, [
-    dispatch,
-    navigate,
-    user,
-    successDelete,
-    successCreate,
-    createdProduct,
-    pageNumber,
-  ]);
+  }, [dispatch, navigate, user, successDelete, pageNumber]);
 
   const deleteHandler = (productId) => {
     if (window.confirm("Are you sure to delete the product?")) {
@@ -76,7 +52,7 @@ const ProductListPage = () => {
   };
 
   const createProductHandler = () => {
-    dispatch(createProduct());
+    navigate("/admin/product/create");
   };
 
   return (
@@ -86,13 +62,13 @@ const ProductListPage = () => {
           <h1>Products</h1>
         </Col>
         <Col md={1}>
-          <Button onClick={createProductHandler} className="mt-2">Create</Button>
+          <Button onClick={createProductHandler} className="mt-2">
+            Create
+          </Button>
         </Col>
       </Row>
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant="danger">{errorDelete}</Message>}
-      {loadingCreate && <Loader />}
-      {errorCreate && <Message variant="danger">{errorCreate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
