@@ -24,11 +24,6 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
             <Nav className="ms-auto">
-              <LinkContainer to="/cart">
-                <Nav.Link>
-                  <i className="fa-solid fa-cart-shopping"></i>&nbsp;Cart
-                </Nav.Link>
-              </LinkContainer>
               {user && user.isAdmin && (
                 <NavDropdown title="Dashboard" id="adminmenu">
                   <LinkContainer to="/admin/userList">
@@ -61,6 +56,11 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
+              <LinkContainer to="/cart">
+                <Nav.Link>
+                  <i className="fa-solid fa-cart-shopping"></i>&nbsp;Cart
+                </Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Container>
